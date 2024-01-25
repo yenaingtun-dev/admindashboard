@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -20,9 +20,10 @@ Route::redirect('/', '/login');
 Auth::routes();
 
 Route::group(
-      ['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']],
+      ['prefix' => 'admin',  'middleware' => ['auth']],
       function () {
             Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-            Route::get('/users', [UserController::class, 'index'])->name('user.index');
+            Route::get('/users', [UserController::class, 'index'])->name('users.index');
+            Route::resource('/roles', RoleController::class);
       }
 );

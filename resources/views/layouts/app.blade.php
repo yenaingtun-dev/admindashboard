@@ -82,12 +82,12 @@
                     <div class="d-flex flex-column align-items-center align-items-sm-start  min-vh-100">
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100" id="menu">
                             <li class="nav-item bg-danger w-100">
-                                <a href="{{ route('admin.user.index') }}" class="nav-link align-middle px-3 text-white">
+                                <a href="{{ route('admin.users.index') }}" class="nav-link align-middle px-3 text-white">
                                     <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">User</span>
                                 </a>
                             </li>
                             <li class="nav-item w-100">
-                                <a href="#" class="nav-link align-middle px-3 text-white">
+                                <a href="{{ route('admin.roles.index') }}" class="nav-link align-middle px-3 text-white">
                                     <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Role</span>
                                 </a>
                             </li>
