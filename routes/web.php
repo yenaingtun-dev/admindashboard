@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +19,10 @@ Route::redirect('/', '/login');
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::group(
+      ['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin', 'middleware' => ['auth']],
+      function () {
+            Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+            Route::get('/users', [UserController::class, 'index'])->name('user.index');
+      }
+);

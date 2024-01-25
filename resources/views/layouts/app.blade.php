@@ -21,6 +21,7 @@
 
 <body>
     <div id="app">
+        <!-- nav bar -->
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -74,9 +75,38 @@
             </div>
         </nav>
 
-        <main class="py-4">
-            @yield('content')
-        </main>
+        <!-- side bar -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-auto col-md-3 col-xl-2 px-0 bg-secondary">
+                    <div class="d-flex flex-column align-items-center align-items-sm-start  min-vh-100">
+                        <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100" id="menu">
+                            <li class="nav-item bg-danger w-100">
+                                <a href="{{ route('admin.user.index') }}" class="nav-link align-middle px-3 text-white">
+                                    <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">User</span>
+                                </a>
+                            </li>
+                            <li class="nav-item w-100">
+                                <a href="#" class="nav-link align-middle px-3 text-white">
+                                    <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Role</span>
+                                </a>
+                            </li>
+                            <li class="nav-item w-100">
+                                <a href="#" class="nav-link align-middle px-3 text-white">
+                                    <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Permission</span>
+                                </a>
+                            </li>
+                        </ul>
+                        <hr>
+                    </div>
+                </div>
+                <!-- main -->
+                <div class="col py-4">
+                    @yield('content')
+                </div>
+            </div>
+        </div>
+
     </div>
 </body>
 
