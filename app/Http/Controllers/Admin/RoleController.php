@@ -5,9 +5,16 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\Interfaces\RoleRepositoryInterface;
 
 class RoleController extends Controller
 {
+    public $roleRepository;
+    public function __construct(RoleRepositoryInterface $roleRepository)
+    {
+        $this->roleRepository = $roleRepository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +22,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        return view('admin.roles.role-index');
+        $roles = $this->roleRepository->all();
+        return view('admin.roles.role-index', compact('roles'));
     }
 
     /**

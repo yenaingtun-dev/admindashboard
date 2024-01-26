@@ -2,9 +2,15 @@
 
 namespace App\Repositories;
 
+use File;
+use Exception;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 use App\Repositories\Interfaces\UserRepositoryInterface;
+
+use function App\Helpers\MoveImage;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -20,54 +26,44 @@ class UserRepository implements UserRepositoryInterface
 
       public function store($data)
       {
-            // try {
-            //       DB::beginTransaction();
-            //       /** @var User $user */
-            //       $user = User::create($data);
-            //       if (!empty($data['profile_image'])) {
-            //             $imagePath = User::moveImage($data['profile_image'], User::IMAGE_PATH, 'profile_image', 'users');
-            //             $user->profile_image = $imagePath;
-            //             $user->save();
-            //       } else {
-            //             $user->profile_image = '/user-avatar.png';
-            //             $user->save();
-            //       }
-            //       File::deleteDirectory(public_path('uploads/temp/users/' . Auth::id()));
-            //       DB::commit();
-            // } catch (Exception $e) {
-            //       DB::rollBack();
-            //       return redirect()->back()->withErrors(new \Illuminate\Support\MessageBag(['catch_exception' => $e->getMessage()]));
-            // }
-
-            // return $user;
+            $user = User::create($data);
+            $newPath = '';
+            $imagePath = '';
+            if ($data['profile_image_path']) {
+                  $oldPath = 'uploads/temp/' . 'users' . '/' . Auth::id() . '/' . $data['profile_image_path'];
+            }
+            $newPath = public_path(User::IMAGE_PATH . 'profileImagePath');
+            if (!File::isDirectory($newPath)) {
+                  File::makeDirectory($newPath, 0777, true, true);
+            }
+            File::copy($oldPath, $newPath . '/' . $data['profile_image_path']);
+            if (File::exists($oldPath)) {
+                  File::delete($oldPath);
+            }
+            $imagePath = '/' . User::IMAGE_PATH . 'profileImagePath' . '/' . $data['profile_image_path'];
+            $user->profile_image_path = $imagePath;
+            $user->save();
+            File::deleteDirectory(public_path('uploads/temp/users/' . Auth::id()));
+            return $user;
       }
 
       public function update($data, $user)
       {
-            // try {
-            //       DB::beginTransaction();
-
-            //       if (!empty($data['profile_image'])) {
-            //             $profile_image = $data['profile_image'];
-            //             unset($data['profile_image']);
-            //       }
-            //       $user->update($data);
-            //       if (!empty($profile_image) && is_null($user->profile_image)) {
-            //             $imagePath = User::moveImage($profile_image, User::IMAGE_PATH, 'profile_image', 'users');
-            //             if (File::exists($user->profile_image)) {
-            //                   File::delete($user->profile_image);
-            //             }
-            //             $user->profile_image = $imagePath;
-            //             $user->save();
-            //       }
-            //       File::deleteDirectory(public_path('uploads/temp/users/' . Auth::id()));
-            //       DB::commit();
-            // } catch (Exception $e) {
-            //       DB::rollBack();
-            //       return redirect()->back()->withErrors(new \Illuminate\Support\MessageBag(['catch_exception' => $e->getMessage()]));
-            // }
-
-            // return $user;
+            if (!empty($data['profile_image_path'])) {
+                  $profile_image = $data['profile_image_path'];
+                  unset($data['profile_image_path']);
+            }
+            $user->update($data);
+            if (!empty($profile_image) && is_null($user->profile_image_path)) {
+                  $imagePath = User::moveImage($profile_image, User::IMAGE_PATH, 'profileImagePath', 'users');
+                  if (File::exists($user->profile_image_path)) {
+                        File::delete($user->profile_image_path);
+                  }
+                  $user->profile_image_path = $imagePath;
+                  $user->save();
+            }
+            File::deleteDirectory(public_path('uploads/temp/users/' . Auth::id()));
+            return $user;
       }
 
       public function softDelete($user)

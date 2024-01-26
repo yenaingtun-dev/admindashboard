@@ -7,17 +7,14 @@
                   <thead>
                         <tr>
                               <th scope="col">#</th>
-                              <th scope="col">Name</th>
-                              <th scope="col">Email</th>
-                              <th scope="col">Role</th>
+                              <th scope="col">Title</th>
                         </tr>
                   </thead>
                   <tbody>
-                        @foreach ($users as $user)
+                        @foreach ($roles as $role)
                         <tr>
-                              <th scope="row">{{ $user->id }}</th>
-                              <td>{{ $user->name }}</td>
-                              <td>{{ $user->email }}</td>
+                              <th scope="row">{{ $role->id }}</th>
+                              <td>{{ $role->title }}</td>
                               <td></td>
                         </tr>
                         @endforeach

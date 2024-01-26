@@ -13,10 +13,16 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     @stack('style')
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+    <style>
+        .dz-image img {
+            width: 120px !important;
+            height: 120px !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -82,12 +88,12 @@
                     <div class="d-flex flex-column align-items-center align-items-sm-start  min-vh-100">
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100" id="menu">
                             <li class="nav-item bg-danger w-100">
-                                <a href="{{ route('admin.users.index') }}" class="nav-link align-middle px-3 text-white">
+                                <a href="{{ route('users.index') }}" class="nav-link align-middle px-3 text-white">
                                     <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">User</span>
                                 </a>
                             </li>
                             <li class="nav-item w-100">
-                                <a href="{{ route('admin.roles.index') }}" class="nav-link align-middle px-3 text-white">
+                                <a href="{{ route('roles.index') }}" class="nav-link align-middle px-3 text-white">
                                     <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Role</span>
                                 </a>
                             </li>
@@ -108,6 +114,12 @@
         </div>
 
     </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js"></script>
+    <script>
+        Dropzone.autoDiscover = false;
+    </script>
+    @yield('scripts')
 </body>
 
 </html>

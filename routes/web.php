@@ -23,7 +23,8 @@ Route::group(
       ['prefix' => 'admin',  'middleware' => ['auth']],
       function () {
             Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-            Route::get('/users', [UserController::class, 'index'])->name('users.index');
+            Route::resource('/users', UserController::class);
+            Route::post('/users/storeMedia', [UserController::class, 'storeMedia'])->name('users.store_media');
             Route::resource('/roles', RoleController::class);
       }
 );
