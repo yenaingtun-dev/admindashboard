@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Helpers;
+namespace App\Helpers\helper;
 
 use File;
+use Illuminate\Support\Facades\Auth;
 
 class helper
 {

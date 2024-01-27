@@ -5,12 +5,13 @@ namespace App\Repositories;
 use File;
 use Exception;
 use App\Models\User;
+use App\Helpers\helper\helper;
 use Illuminate\Support\Facades\DB;
+use function App\Helpers\MoveImage;
 use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Database\Eloquent\Collection;
 use App\Repositories\Interfaces\UserRepositoryInterface;
-
-use function App\Helpers\MoveImage;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -54,8 +55,8 @@ class UserRepository implements UserRepositoryInterface
                   unset($data['profile_image_path']);
             }
             $user->update($data);
-            if (!empty($profile_image) && is_null($user->profile_image_path)) {
-                  $imagePath = User::moveImage($profile_image, User::IMAGE_PATH, 'profileImagePath', 'users');
+            if (!empty($profile_image) && empty($user->profile_image_path)) {
+                  $imagePath =  helper::moveImage($profile_image, User::IMAGE_PATH, 'profileImagePath', 'users');
                   if (File::exists($user->profile_image_path)) {
                         File::delete($user->profile_image_path);
                   }

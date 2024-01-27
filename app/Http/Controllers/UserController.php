@@ -64,7 +64,7 @@ class UserController extends Controller
     }
 
     public function show()
-     {
+    {
         dd('hwre');
     }
 }
