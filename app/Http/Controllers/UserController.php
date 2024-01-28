@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\helper\helper;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -66,5 +67,17 @@ class UserController extends Controller
     public function show()
     {
         dd('hwre');
+    }
+
+    public function removeMedia(Request $request)
+    {
+        $type = $request->type;
+        $user_id = $request->model_id;
+        $file_name = $request->file_name;
+        $model = 'App\Models\User';
+
+        $response = helper::removeMedia($model, $user_id, $type, $file_name);
+
+        return $response;
     }
 }

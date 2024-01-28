@@ -20,7 +20,9 @@
                         @foreach ($users as $user)
                         <tr>
                               <th scope="row">{{ $user->id }}</th>
-                              <td></td>
+                              <td>
+                                    <img src="{{ asset($user->profile_image_path) }}" alt="" class="w-25">
+                              </td>
                               <td>{{ $user->name }}</td>
                               <td>{{ $user->email }}</td>
                               <td></td>

@@ -45,7 +45,7 @@
                   $(file.previewElement).find('.dz-error-message').text('You cannot upload any more files');
                   for (let i = 0; i < profileImagesPathDropzone.files.length; i++) {
                         const file = profileImagesPathDropzone.files[i];
-                        if (i >= 5) {
+                        if (i >= 1) {
                               file.previewElement.classList.add('dz-error');
                         }
                   }
@@ -60,7 +60,7 @@
                   $(file.previewElement).find('.dz-error-message').text('You cannot upload any more files');
                   for (let i = 0; i < profileImagesPathDropzone.files.length; i++) {
                         const file = profileImagesPathDropzone.files[i];
-                        if (i >= 5) {
+                        if (i >= 1) {
                               file.previewElement.classList.add('dz-error');
                         }
                   }

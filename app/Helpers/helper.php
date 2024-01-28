@@ -52,4 +52,19 @@ class helper
          $array  = explode('/', $fileName);
          return $array[count($array) - 1];
       }
+
+      public static function removeMedia($model, $model_id, $type, $fileName)
+    {
+        // dd($model::IMAGE_PATH.$type.'/'.$fileName, File::exists($model::IMAGE_PATH.$type.'/'.$fileName));
+        if (File::exists($model::IMAGE_PATH.$type.'/'.$fileName)) {
+            File::delete($model::IMAGE_PATH.$type.'/'.$fileName);
+        }
+
+        $modelObject = $model::find($model_id);
+        //'/user-avatar.png'
+        $modelObject->$type = NULL;
+        $modelObject->save();
+
+        return response()->json(['message' => 'success']);
+    }
 }
