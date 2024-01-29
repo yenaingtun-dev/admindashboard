@@ -88,17 +88,17 @@
                 <div class="col-auto col-md-3 col-xl-2 px-0 bg-secondary">
                     <div class="d-flex flex-column align-items-center align-items-sm-start  min-vh-100">
                         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100" id="menu">
-                            <li class="nav-item bg-danger w-100">
+                            <li class="nav-item w-100 @if(request()->routeIs('users.*')) bg-danger @endif">
                                 <a href="{{ route('users.index') }}" class="nav-link align-middle px-3 text-white">
                                     <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">User</span>
                                 </a>
                             </li>
-                            <li class="nav-item w-100">
+                            <li class="nav-item w-100 @if(request()->routeIs('roles.*')) bg-danger @endif">
                                 <a href="{{ route('roles.index') }}" class="nav-link align-middle px-3 text-white">
                                     <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Role</span>
                                 </a>
                             </li>
-                            <li class="nav-item w-100">
+                            <li class="nav-item w-100 @if(request()->routeIs('permissions.*')) bg-danger @endif">
                                 <a href="{{ route('permissions.index') }}" class="nav-link align-middle px-3 text-white">
                                     <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Permission</span>
                                 </a>
