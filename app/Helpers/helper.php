@@ -67,4 +67,13 @@ class helper
 
         return response()->json(['message' => 'success']);
     }
+
+    static public function hasRole($role_id, $user_roles) : bool {
+      foreach ($user_roles as $key => $user_role) {
+          if ($user_role->id == $role_id) {
+              return true;
+          }
+      }
+      return false;
+  }
 }

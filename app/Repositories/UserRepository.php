@@ -30,21 +30,24 @@ class UserRepository implements UserRepositoryInterface
             $user = User::create($data);
             $newPath = '';
             $imagePath = '';
-            if ($data['profile_image_path']) {
-                  $oldPath = 'uploads/temp/' . 'users' . '/' . Auth::id() . '/' . $data['profile_image_path'];
+            if(isset($data['profile_image_path'])) 
+            {
+                  if ($data['profile_image_path']) {
+                        $oldPath = 'uploads/temp/' . 'users' . '/' . Auth::id() . '/' . $data['profile_image_path'];
+                  }
+                  $newPath = public_path(User::IMAGE_PATH . 'profileImagePath');
+                  if (!File::isDirectory($newPath)) {
+                        File::makeDirectory($newPath, 0777, true, true);
+                  }
+                  File::copy($oldPath, $newPath . '/' . $data['profile_image_path']);
+                  if (File::exists($oldPath)) {
+                        File::delete($oldPath);
+                  }
+                  $imagePath = '/' . User::IMAGE_PATH . 'profileImagePath' . '/' . $data['profile_image_path'];
+                  $user->profile_image_path = $imagePath;
+                  $user->save();
+                  File::deleteDirectory(public_path('uploads/temp/users/' . Auth::id()));
             }
-            $newPath = public_path(User::IMAGE_PATH . 'profileImagePath');
-            if (!File::isDirectory($newPath)) {
-                  File::makeDirectory($newPath, 0777, true, true);
-            }
-            File::copy($oldPath, $newPath . '/' . $data['profile_image_path']);
-            if (File::exists($oldPath)) {
-                  File::delete($oldPath);
-            }
-            $imagePath = '/' . User::IMAGE_PATH . 'profileImagePath' . '/' . $data['profile_image_path'];
-            $user->profile_image_path = $imagePath;
-            $user->save();
-            File::deleteDirectory(public_path('uploads/temp/users/' . Auth::id()));
             return $user;
       }
 
@@ -89,12 +92,12 @@ class UserRepository implements UserRepositoryInterface
 
       public function assignRole($roleInputs, $user)
       {
-            // $roles = [];
-            // if (count($roleInputs) > 0) {
-            //       foreach ($roleInputs as $key => $value) {
-            //             array_push($roles, $value);
-            //       }
-            // }
-            // $user->roles()->sync($roles);
+            $roles = [];
+            if (count($roleInputs) > 0) {
+                  foreach ($roleInputs as $key => $value) {
+                        array_push($roles, $value);
+                  }
+            }
+            $user->roles()->sync($roles);
       }
 }

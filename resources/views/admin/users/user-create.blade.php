@@ -18,6 +18,18 @@
                               <label for="password" class="form-label">Password</label>
                               <input type="password" class="form-control" id="password" name="password">
                         </div>
+                        @if ($roles)
+                              @foreach ($roles as $role)
+                                    <div class="mb-3">
+                                          <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="roles[]" value="{{ $role->id }}" id="{{ $role->title }}">
+                                                <label class="form-check-label" for="{{ $role->title }}">
+                                                      {{ $role->title }}
+                                                </label>
+                                          </div>
+                                    </div>
+                              @endforeach
+                        @endif
                         <div class="form-group mb-3">
                               <div class="needsclick dropzone" id="profileImagesPathDropzone">
                               </div>

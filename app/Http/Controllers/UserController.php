@@ -7,16 +7,18 @@ use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\Interfaces\RoleRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 
 class UserController extends Controller
 {
 
-    public $userRepository;
-    public function __construct(UserRepositoryInterface $userRepository)
+    public $userRepository, $roleRepository;
+    public function __construct(UserRepositoryInterface $userRepository, RoleRepositoryInterface $roleRepository)
     {
         $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
     }
 
     public function index()
@@ -27,12 +29,16 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('admin.users.user-create');
+        $roles = $this->roleRepository->all();
+        return view('admin.users.user-create', compact('roles'));
     }
 
     public function store(Request $request)
     {
-        $this->userRepository->store($request->all());
+        $user = $this->userRepository->store($request->all());
+        if (count($request->input('roles', [])) > 0) {
+            $this->userRepository->assignRole($request->input('roles'), $user);
+        }
         return redirect()->route('users.index')->with('success', 'User Create Successfully!');
     }
 
@@ -54,12 +60,17 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return view('admin.users.user-edit', compact('user'));
+        $roles = $this->roleRepository->all();
+        $user->load('roles');
+        return view('admin.users.user-edit', compact('user','roles'));
     }
 
     public function update(Request $request, User $user)
     {
         $this->userRepository->update($request->all(), $user);
+        if (count($request->input('roles', [])) > 0) {
+            $this->userRepository->assignRole($request->input('roles'), $user);
+        }
         return redirect()->route('users.index')->with('success', 'User Update Successfully!');
     }
 
@@ -80,7 +91,7 @@ class UserController extends Controller
         return $response;
     }
 
-    public function destory(User $user)
+    public function destroy(User $user)
     {
         $this->userRepository->softdelete($user);
         return redirect()->back()->with('success', 'User Delete Successfully!');

@@ -25,7 +25,13 @@
                               </td>
                               <td>{{ $user->name }}</td>
                               <td>{{ $user->email }}</td>
-                              <td></td>
+                              <td>
+                                    @if ($user->roles)
+                                          @foreach ($user->roles as $role)
+                                                {{ $role->title }}
+                                          @endforeach
+                                    @endif
+                              </td>
                               <td>
                                     <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-info">edit</a>
                               </td>
