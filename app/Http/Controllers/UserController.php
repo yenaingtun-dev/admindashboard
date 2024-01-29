@@ -60,7 +60,6 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $this->userRepository->update($request->all(), $user);
-
         return redirect()->route('users.index')->with('success', 'User Update Successfully!');
     }
 
@@ -79,5 +78,11 @@ class UserController extends Controller
         $response = helper::removeMedia($model, $user_id, $type, $file_name);
 
         return $response;
+    }
+
+    public function destory(User $user)
+    {
+        $this->userRepository->softdelete($user);
+        return redirect()->back()->with('success', 'User Delete Successfully!');
     }
 }

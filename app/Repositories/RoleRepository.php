@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Role;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use App\Repositories\Interfaces\RoleRepositoryInterface;
 
@@ -21,54 +20,15 @@ class RoleRepository implements RoleRepositoryInterface
 
       public function store($data)
       {
-            // try {
-            //       DB::beginTransaction();
-            //       /** @var User $user */
-            //       $user = User::create($data);
-            //       if (!empty($data['profile_image'])) {
-            //             $imagePath = User::moveImage($data['profile_image'], User::IMAGE_PATH, 'profile_image', 'users');
-            //             $user->profile_image = $imagePath;
-            //             $user->save();
-            //       } else {
-            //             $user->profile_image = '/user-avatar.png';
-            //             $user->save();
-            //       }
-            //       File::deleteDirectory(public_path('uploads/temp/users/' . Auth::id()));
-            //       DB::commit();
-            // } catch (Exception $e) {
-            //       DB::rollBack();
-            //       return redirect()->back()->withErrors(new \Illuminate\Support\MessageBag(['catch_exception' => $e->getMessage()]));
-            // }
-
-            // return $user;
+            $role = Role::create($data);
+            return $role;
       }
 
-      public function update($data, $user)
+      public function update($data, $role)
       {
-            // try {
-            //       DB::beginTransaction();
-
-            //       if (!empty($data['profile_image'])) {
-            //             $profile_image = $data['profile_image'];
-            //             unset($data['profile_image']);
-            //       }
-            //       $user->update($data);
-            //       if (!empty($profile_image) && is_null($user->profile_image)) {
-            //             $imagePath = User::moveImage($profile_image, User::IMAGE_PATH, 'profile_image', 'users');
-            //             if (File::exists($user->profile_image)) {
-            //                   File::delete($user->profile_image);
-            //             }
-            //             $user->profile_image = $imagePath;
-            //             $user->save();
-            //       }
-            //       File::deleteDirectory(public_path('uploads/temp/users/' . Auth::id()));
-            //       DB::commit();
-            // } catch (Exception $e) {
-            //       DB::rollBack();
-            //       return redirect()->back()->withErrors(new \Illuminate\Support\MessageBag(['catch_exception' => $e->getMessage()]));
-            // }
-
-            // return $user;
+            $role->update($data);
+            $role->save();
+            return $role;
       }
 
       public function softDelete($user)
@@ -91,14 +51,14 @@ class RoleRepository implements RoleRepositoryInterface
             $this->all()->onlyTrashed()->restore();
       }
 
-      public function assignRole($roleInputs, $user)
+      public function assignPermission($permissionInputs, $role)
       {
-            // $roles = [];
-            // if (count($roleInputs) > 0) {
-            //       foreach ($roleInputs as $key => $value) {
-            //             array_push($roles, $value);
-            //       }
-            // }
-            // $user->roles()->sync($roles);
+      //     $permissions = [];
+      //     if(count($permissionInputs) > 0) {
+      //         foreach ($permissionInputs as $key => $value) {
+      //             array_push($permissions, $value);
+      //         }
+      //     }
+      //     $role->permissions()->sync($permissions);
       }
 }

@@ -9,8 +9,5 @@ class Role extends Model
 {
     use HasFactory;
 
-    public function index()
-    {
-        return view('admin.roles.role-index');
-    }
+    protected $guarded = [];
 }

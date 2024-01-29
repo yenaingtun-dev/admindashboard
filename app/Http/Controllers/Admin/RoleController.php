@@ -33,7 +33,7 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.roles.roles-create');
     }
 
     /**
@@ -44,7 +44,8 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->roleRepository->store($request->all());
+        return redirect()->route('roles.index')->with('success', 'Role Create Successfully!');
     }
 
     /**
@@ -55,7 +56,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
-        //
+        dd($role);
     }
 
     /**
@@ -66,7 +67,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        //
+        return view('admin.roles.role-edit', compact('role'));
     }
 
     /**
@@ -78,7 +79,8 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-        //
+        $this->roleRepository->update($request->all(), $role);
+        return redirect()->route('roles.index')->with('success', 'Role Update Successfully!');
     }
 
     /**
@@ -89,6 +91,7 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        //
+        $this->roleRepository->softdelete($role);
+        return redirect()->back()->with('success', 'Role Delete Successfully!');
     }
 }
