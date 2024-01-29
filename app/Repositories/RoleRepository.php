@@ -26,9 +26,8 @@ class RoleRepository implements RoleRepositoryInterface
 
       public function update($data, $role)
       {
-            $role->update($data);
-            $role->save();
-            return $role;
+            $roleData = ['title'=>$data['title']];
+            return $role->update($roleData);
       }
 
       public function softDelete($user)
@@ -53,12 +52,12 @@ class RoleRepository implements RoleRepositoryInterface
 
       public function assignPermission($permissionInputs, $role)
       {
-      //     $permissions = [];
-      //     if(count($permissionInputs) > 0) {
-      //         foreach ($permissionInputs as $key => $value) {
-      //             array_push($permissions, $value);
-      //         }
-      //     }
-      //     $role->permissions()->sync($permissions);
+          $permissions = [];
+          if(count($permissionInputs) > 0) {
+              foreach ($permissionInputs as $key => $value) {
+                  array_push($permissions, $value);
+              }
+          }
+          $role->permissions()->sync($permissions);
       }
 }

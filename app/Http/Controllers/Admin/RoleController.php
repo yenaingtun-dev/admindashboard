@@ -5,14 +5,16 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\Interfaces\PermissionRepositoryInterface;
 use App\Repositories\Interfaces\RoleRepositoryInterface;
 
 class RoleController extends Controller
 {
-    public $roleRepository;
-    public function __construct(RoleRepositoryInterface $roleRepository)
+    public $roleRepository, $permissionRepository;
+    public function __construct(RoleRepositoryInterface $roleRepository, PermissionRepositoryInterface $permissionRepository)
     {
         $this->roleRepository = $roleRepository;
+        $this->permissionRepository = $permissionRepository;
     }
 
     /**
@@ -33,7 +35,8 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('admin.roles.roles-create');
+        $permissions = $this->permissionRepository->all();
+        return view('admin.roles.roles-create', compact('permissions'));
     }
 
     /**
@@ -44,7 +47,10 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $this->roleRepository->store($request->all());
+        $role = $this->roleRepository->store($request->all());
+        if(count($request->input('permissions', [])) > 0) {
+            $this->roleRepository->assignPermission($request->input('permissions'), $role);
+        }
         return redirect()->route('roles.index')->with('success', 'Role Create Successfully!');
     }
 
@@ -67,7 +73,9 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        return view('admin.roles.role-edit', compact('role'));
+        $permissions = $this->permissionRepository->all();
+        $role->load('permissions');
+        return view('admin.roles.role-edit', compact('role', 'permissions'));
     }
 
     /**
@@ -80,6 +88,9 @@ class RoleController extends Controller
     public function update(Request $request, Role $role)
     {
         $this->roleRepository->update($request->all(), $role);
+        if(count($request->input('permissions', [])) > 0) {
+            $this->roleRepository->assignPermission($request->input('permissions'), $role);
+        }
         return redirect()->route('roles.index')->with('success', 'Role Update Successfully!');
     }
 
