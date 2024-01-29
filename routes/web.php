@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -27,5 +28,6 @@ Route::group(
             Route::post('/users/storeMedia', [UserController::class, 'storeMedia'])->name('users.store_media');
             Route::post('/users/removeMedia', [UserController::class, 'removeMedia'])->name('users.remove_media');
             Route::resource('/roles', RoleController::class);
+            Route::resource('/permissions', PermissionController::class);
       }
 );

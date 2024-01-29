@@ -99,7 +99,7 @@
                                 </a>
                             </li>
                             <li class="nav-item w-100">
-                                <a href="#" class="nav-link align-middle px-3 text-white">
+                                <a href="{{ route('permissions.index') }}" class="nav-link align-middle px-3 text-white">
                                     <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Permission</span>
                                 </a>
                             </li>
