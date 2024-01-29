@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\Interfaces\PermissionRepositoryInterface;
+use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response;
 use App\Repositories\Interfaces\RoleRepositoryInterface;
+use App\Repositories\Interfaces\PermissionRepositoryInterface;
 
 class RoleController extends Controller
 {
@@ -35,6 +37,7 @@ class RoleController extends Controller
      */
     public function create()
     {
+        abort_if(Gate::denies('create role'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $permissions = $this->permissionRepository->all();
         return view('admin.roles.roles-create', compact('permissions'));
     }
@@ -47,6 +50,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        abort_if(Gate::denies('create role'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $role = $this->roleRepository->store($request->all());
         if(count($request->input('permissions', [])) > 0) {
             $this->roleRepository->assignPermission($request->input('permissions'), $role);
@@ -73,6 +77,7 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        abort_if(Gate::denies('edit role'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $permissions = $this->permissionRepository->all();
         $role->load('permissions');
         return view('admin.roles.role-edit', compact('role', 'permissions'));
@@ -87,6 +92,7 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
+        abort_if(Gate::denies('edit role'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $this->roleRepository->update($request->all(), $role);
         if(count($request->input('permissions', [])) > 0) {
             $this->roleRepository->assignPermission($request->input('permissions'), $role);
@@ -102,6 +108,7 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        abort_if(Gate::denies('delete role'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $this->roleRepository->softdelete($role);
         return redirect()->back()->with('success', 'Role Delete Successfully!');
     }

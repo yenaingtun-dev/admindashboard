@@ -1,9 +1,10 @@
 @extends('layouts.app')
-
 @section('content')
 <div class="col">
       <div class="container px-5">
-            <a href="{{ route('users.create') }}">Create</a>
+            @can('create user')
+                  <a href="{{ route('users.create') }}">Create</a>
+            @endcan
             <table class="table table-bordered">
                   <thead>
                         <tr>
@@ -33,14 +34,18 @@
                                     @endif
                               </td>
                               <td>
-                                    <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-info">edit</a>
-                              </td>
+                                    @can('edit user')
+                                          <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-info">edit</a>
+                                    @endcan
+                              </td> 
                               <td>
-                                    <form action="{{ route('users.destroy', $user) }}" method="post">
-                                          @csrf
-                                          @method('DELETE')
-                                          <button type="submit" class="btn btn-sm btn-danger">delete</button>
-                                    </form>
+                                    @can('delete user')
+                                          <form action="{{ route('users.destroy', $user) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">delete</button>
+                                          </form>
+                                    @endcan
                               </td>
                         </tr>
                         @endforeach

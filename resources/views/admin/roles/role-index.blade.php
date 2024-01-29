@@ -3,7 +3,9 @@
 @section('content')
 <div class="col">
       <div class="container px-5">
-            <a href="{{ route('roles.create') }}">Create</a>
+            @can('create role')
+                  <a href="{{ route('roles.create') }}">Create</a>
+            @endcan
             <table class="table table-bordered">
                   <thead>
                         <tr>
@@ -21,14 +23,18 @@
                               <td>{{ $role->title }}</td>
                               <td></td>
                               <td>
-                                    <a class="btn btn-sm btn-info" href="{{ route('roles.edit', $role) }}">edit</a>
+                                    @can('edit role')
+                                          <a class="btn btn-sm btn-info" href="{{ route('roles.edit', $role) }}">edit</a>
+                                    @endcan
                               </td>
                               <td>
-                                    <form action="{{ route('roles.destroy',$role) }}" method="post">
-                                          @csrf
-                                          @method('DELETE')
-                                          <button class="btn btn-sm btn-danger" type="submit">delete</button>
-                                    </form>
+                                    @can('delete role')
+                                          <form action="{{ route('roles.destroy',$role) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-sm btn-danger" type="submit">delete</button>
+                                          </form>
+                                    @endcan
                               </td>
                         </tr>
                         @endforeach

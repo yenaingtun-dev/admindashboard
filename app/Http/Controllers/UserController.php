@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\helper\helper;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Helpers\helper\helper;
 use App\Http\Controllers\Controller;
-use App\Repositories\Interfaces\RoleRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response;
+use App\Repositories\Interfaces\RoleRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 
 class UserController extends Controller
@@ -29,12 +31,14 @@ class UserController extends Controller
 
     public function create()
     {
+        abort_if(Gate::denies('create user'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $roles = $this->roleRepository->all();
         return view('admin.users.user-create', compact('roles'));
     }
 
     public function store(Request $request)
     {
+        abort_if(Gate::denies('create user'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $user = $this->userRepository->store($request->all());
         if (count($request->input('roles', [])) > 0) {
             $this->userRepository->assignRole($request->input('roles'), $user);
@@ -60,6 +64,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        abort_if(Gate::denies('edit user'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $roles = $this->roleRepository->all();
         $user->load('roles');
         return view('admin.users.user-edit', compact('user','roles'));
@@ -93,6 +98,7 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        abort_if(Gate::denies('delete user'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $this->userRepository->softdelete($user);
         return redirect()->back()->with('success', 'User Delete Successfully!');
     }
