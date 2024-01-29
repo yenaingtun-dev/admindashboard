@@ -83,10 +83,32 @@
                                     name = profileImageDocumentMap[file.name]
                               }
                               $('form').find('input[name="profile_image_path"][value="' + name + '"]').remove()
+                              removeMedia(file.name, 'profile_image_path')
                         }
                   });
             },
             init: function() {}
       });
+       // remove media
+    function removeMedia(file_name, type) {
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('users.remove_media') }}",
+                data: {
+                    'file_name': file_name,
+                    'type': type,
+                    'model_id': {!! auth()->user()->id !!},
+                },
+                headers: {
+                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                },
+                success: function(data) {
+                    console.log('success');
+                },
+                error: function(data) {
+                    console.log(data);
+                }
+            });
+        }
 </script>
 @endsection

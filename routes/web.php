@@ -25,7 +25,7 @@ Route::group(
             Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
             Route::resource('/users', UserController::class);
             Route::post('/users/storeMedia', [UserController::class, 'storeMedia'])->name('users.store_media');
-            Route::post('users/removeMedia', [UserController::class, 'removeMedia'])->name('users.remove_media');
+            Route::post('/users/removeMedia', [UserController::class, 'removeMedia'])->name('users.remove_media');
             Route::resource('/roles', RoleController::class);
       }
 );
