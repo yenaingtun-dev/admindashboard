@@ -20,8 +20,7 @@ class RoleRepository implements RoleRepositoryInterface
 
       public function store($data)
       {
-            $role = Role::create($data);
-            return $role;
+            return Role::create($data);
       }
 
       public function update($data, $role)

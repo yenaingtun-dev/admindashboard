@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use App\Models\User;
@@ -31,14 +31,14 @@ class UserController extends Controller
 
     public function create()
     {
-        abort_if(Gate::denies('create user'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('create_user'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $roles = $this->roleRepository->all();
         return view('admin.users.user-create', compact('roles'));
     }
 
     public function store(Request $request)
     {
-        abort_if(Gate::denies('create user'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('create_user'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $user = $this->userRepository->store($request->all());
         if (count($request->input('roles', [])) > 0) {
             $this->userRepository->assignRole($request->input('roles'), $user);
@@ -64,7 +64,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        abort_if(Gate::denies('edit user'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('edit_user'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $roles = $this->roleRepository->all();
         $user->load('roles');
         return view('admin.users.user-edit', compact('user','roles'));
@@ -98,7 +98,7 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        abort_if(Gate::denies('delete user'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('delete_user'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $this->userRepository->softdelete($user);
         return redirect()->back()->with('success', 'User Delete Successfully!');
     }

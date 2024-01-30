@@ -103,6 +103,11 @@
                                     <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Permission</span>
                                 </a>
                             </li>
+                            <li class="nav-item w-100 @if(request()->routeIs('branches.*')) bg-danger @endif">
+                                <a href="{{ route('branches.index') }}" class="nav-link align-middle px-3 text-white">
+                                    <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Branch</span>
+                                </a>
+                            </li>
                         </ul>
                         <hr>
                     </div>

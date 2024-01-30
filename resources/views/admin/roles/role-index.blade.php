@@ -1,9 +1,8 @@
 @extends('layouts.app')
-
 @section('content')
 <div class="col">
       <div class="container px-5">
-            @can('create role')
+            @can('create_role')
                   <a href="{{ route('roles.create') }}">Create</a>
             @endcan
             <table class="table table-bordered">
@@ -23,12 +22,12 @@
                               <td>{{ $role->title }}</td>
                               <td></td>
                               <td>
-                                    @can('edit role')
+                                    @can('edit_role')
                                           <a class="btn btn-sm btn-info" href="{{ route('roles.edit', $role) }}">edit</a>
                                     @endcan
                               </td>
                               <td>
-                                    @can('delete role')
+                                    @can('delete_role')
                                           <form action="{{ route('roles.destroy',$role) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')

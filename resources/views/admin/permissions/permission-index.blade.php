@@ -2,7 +2,7 @@
 @section('content')
 <div class="col">
       <div class="container px-5">
-            @can('create permission')
+            @can('create_permission')
                   <a href="{{ route('permissions.create') }}">Create</a>
             @endcan
             <table class="table table-bordered">
@@ -20,12 +20,12 @@
                               <th scope="row">{{ $permission->id }}</th>
                               <td>{{ $permission->title }}</td>
                               <td>
-                                    @can('edit permission')
+                                    @can('edit_permission')
                                           <a class="btn btn-sm btn-info" href="{{ route('permissions.edit', $permission) }}">edit</a>
                                     @endcan
                               </td>
                               <td>
-                                    @can('delete permission')
+                                    @can('delete_permission')
                                           <form action="{{ route('permissions.destroy',$permission) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')

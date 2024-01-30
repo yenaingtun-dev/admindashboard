@@ -2,7 +2,7 @@
 @section('content')
 <div class="col">
       <div class="container px-5">
-            @can('create user')
+            @can('create_user')
                   <a href="{{ route('users.create') }}">Create</a>
             @endcan
             <table class="table table-bordered">
@@ -34,12 +34,12 @@
                                     @endif
                               </td>
                               <td>
-                                    @can('edit user')
+                                    @can('edit_user')
                                           <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-info">edit</a>
                                     @endcan
                               </td> 
                               <td>
-                                    @can('delete user')
+                                    @can('delete_user')
                                           <form action="{{ route('users.destroy', $user) }}" method="post">
                                                 @csrf
                                                 @method('DELETE')

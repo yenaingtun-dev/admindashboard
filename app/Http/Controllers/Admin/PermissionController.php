@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Permission;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repositories\Interfaces\PermissionRepositoryInterface;
@@ -34,7 +35,7 @@ class PermissionController extends Controller
      */
     public function create()
     {
-        abort_if(Gate::denies('create permission'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('create_permission'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         return view('admin.permissions.permission-create');
     }
 
@@ -46,7 +47,7 @@ class PermissionController extends Controller
      */
     public function store(Request $request)
     {
-        abort_if(Gate::denies('create permission'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('create_permission'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $this->permissionRepository->store($request->all());
         return redirect()->route('permissions.index');
     }
@@ -70,7 +71,7 @@ class PermissionController extends Controller
      */
     public function edit(Permission $permission)
     {
-        abort_if(Gate::denies('edit permission'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('edit_permission'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         return view('admin.permissions.permission-edit', compact('permission'));
     }
 
@@ -83,7 +84,7 @@ class PermissionController extends Controller
      */
     public function update(Request $request, Permission $permission)
     {
-        abort_if(Gate::denies('edit permission'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('edit_permission'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $this->permissionRepository->update($request->all(), $permission);
         return redirect()->route('permissions.index');
     }
@@ -96,7 +97,7 @@ class PermissionController extends Controller
      */
     public function destroy(Permission $permission)
     {
-        abort_if(Gate::denies('delete permission'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('delete_permission'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $this->permissionRepository->softDelete($permission);
         return back();
     }
