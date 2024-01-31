@@ -3,6 +3,7 @@
 namespace App\Helpers\helper;
 
 use File;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 class helper
@@ -76,4 +77,14 @@ class helper
       }
       return false;
   }
+
+      /**
+       * get admin role user id
+       */
+      public static function getUserAdmin($adminRole) 
+      {
+            return User::whereHas('roles', function ($query) use ($adminRole) {
+                  $query->where('title', $adminRole );
+            })->first();
+      } 
 }

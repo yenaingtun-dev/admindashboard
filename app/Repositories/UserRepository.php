@@ -94,7 +94,7 @@ class UserRepository implements UserRepositoryInterface
       {
             $roles = [];
             if (count($roleInputs) > 0) {
-                  foreach ($roleInputs as $key => $value) {
+                  foreach ($roleInputs as $value) {
                         array_push($roles, $value);
                   }
             }

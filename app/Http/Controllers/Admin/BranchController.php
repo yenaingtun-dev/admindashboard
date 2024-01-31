@@ -6,14 +6,18 @@ use App\Models\Branch;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\BranchRepositoryInterface;
+use App\Repositories\Interfaces\PermissionRepositoryInterface;
+use App\Repositories\Interfaces\RoleRepositoryInterface;
 
 class BranchController extends Controller
 {
 
-    public $branchRepository;
-    public function __construct(BranchRepositoryInterface $branchRepository)
+    public $branchRepository, $roleRepository, $permissionRepository;
+    public function __construct(BranchRepositoryInterface $branchRepository, RoleRepositoryInterface $roleRepository, PermissionRepositoryInterface $permissionRepository)
     {
         $this->branchRepository = $branchRepository;
+        $this->roleRepository = $roleRepository;
+        $this->permissionRepository = $permissionRepository;
     }
 
     /**
@@ -46,7 +50,7 @@ class BranchController extends Controller
     public function store(Request $request)
     {
         $this->branchRepository->store($request->all());
-        return back();
+        return redirect(route('branches.index'));
     }
 
     /**

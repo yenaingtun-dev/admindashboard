@@ -2,12 +2,24 @@
 
 namespace App\Repositories;
 
+use App\Helpers\helper\helper;
+use App\Models\User;
 use App\Models\Branch;
 use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Interfaces\RoleRepositoryInterface;
 use App\Repositories\Interfaces\BranchRepositoryInterface;
+use App\Repositories\Interfaces\PermissionRepositoryInterface;
 
 class BranchRepository implements BranchRepositoryInterface
 {
+      public $roleRepository, $permissionRepository;
+      public function __construct(RoleRepositoryInterface $roleRepository, PermissionRepositoryInterface $permissionRepository)
+      {
+          $this->roleRepository = $roleRepository;
+          $this->permissionRepository = $permissionRepository;
+      }
+
+
       public function all(): Collection
       {
             return Branch::all();
@@ -20,7 +32,13 @@ class BranchRepository implements BranchRepositoryInterface
 
       public function store($data)
       {
-            return Branch::create($data);
+            $id = Branch::create($data)->id;
+            $branch = [
+                  'id' => $id,
+                  'name' => $data['name']
+            ];
+            $this->roleRepository->storeBranch($branch);
+            $this->permissionRepository->storeBranch($branch);
       }
 
       public function update($data, $branch)

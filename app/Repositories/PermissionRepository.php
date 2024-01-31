@@ -2,13 +2,21 @@
 
 namespace App\Repositories;
 
-use App\Models\Role;
 use App\Models\Permission;
+use App\Helpers\helper\helper;
 use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Interfaces\RoleRepositoryInterface;
 use App\Repositories\Interfaces\PermissionRepositoryInterface;
 
 class PermissionRepository implements PermissionRepositoryInterface
 {
+
+      public $roleRepository;
+      public function __construct(RoleRepositoryInterface $roleRepository)
+      {
+          $this->roleRepository = $roleRepository;
+      }
+
       public function all(): Collection
       {
             return Permission::all();
@@ -21,15 +29,44 @@ class PermissionRepository implements PermissionRepositoryInterface
 
       public function store($data)
       {
-            $role = Permission::create($data);
-            return $role;
+            if ($data['id']) {
+                  $permission =  Permission::create([
+                        'title' => $data['name'] . ' permission_branch',
+                        'branch_id' => $data['id'],
+                        'branch_permission_slug' => $data['name'] . ' branch_permission_slug'
+                  ]);
+                  $superAdmin = helper::getUserAdmin('super_admin');
+                  $permissions = [$permission->id];
+                  $this->roleRepository->assignPermission($permissions, $superAdmin);
+                  return $permission;
+            } else {
+                  return Permission::create($data);
+            }
       }
 
-      public function update($data, $role)
+      public function storeBranch($data)
       {
-            $role->update($data);
-            $role->save();
-            return $role;
+            $permission =  Permission::create([
+                  'title' => $data['name'] . ' permission_branch',
+                  'branch_id' => $data['id'],
+                  'branch_permission_slug' => $data['name'] . ' branch_permission_slug'
+            ]);
+            $superAdmin = helper::getUserAdmin('super_admin');
+            $superAdminPermissions = $superAdmin->permissions()->all();
+            foreach ($superAdminPermissions as $value) {
+                  $superPermissions[] = $value;
+            }
+            $adminPermissions[] = $permission->id;
+            $superPermissions[] = $permission->id;
+            $permissions[] = [$adminPermissions, $superAdminPermissions];
+            $roles = $superAdmin->roles;
+            $this->roleRepository->assignPermission($permissions, $roles);
+            return $permission;
+      }
+
+      public function update($data, $permission)
+      {
+            return $permission->update($data)->save();
       }
 
       public function softDelete($user)
