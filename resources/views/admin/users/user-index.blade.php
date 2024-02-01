@@ -29,6 +29,7 @@
                               <td>
                                     @if ($user->roles)
                                           @foreach ($user->roles as $role)
+                                                {{ $loop->first ? '' : ',' }}
                                                 {{ $role->title }}
                                           @endforeach
                                     @endif
@@ -37,7 +38,7 @@
                                     @can('edit_user')
                                           <a href="{{ route('users.edit', $user) }}" class="btn btn-sm btn-info">edit</a>
                                     @endcan
-                              </td> 
+                              </td>
                               <td>
                                     @can('delete_user')
                                           <form action="{{ route('users.destroy', $user) }}" method="post">

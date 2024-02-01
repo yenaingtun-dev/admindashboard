@@ -17,7 +17,6 @@
                         <tr>
                               <th scope="row">{{ $branch->id }}</th>
                               <td>{{ $branch->name }}</td>
-                              <td></td>
                               <td>
                                     <a class="btn btn-sm btn-info" href="{{ route('branches.edit', $branch) }}">edit</a>
                               </td>

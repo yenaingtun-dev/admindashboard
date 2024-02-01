@@ -20,7 +20,12 @@
                         <tr>
                               <th scope="row">{{ $role->id }}</th>
                               <td>{{ $role->title }}</td>
-                              <td></td>
+                              <td>
+                                    @foreach ($role->permissions as $permission)
+                                          {{ $loop->first ? '' : ',' }}
+                                          {{ $permission->title }}
+                                    @endforeach
+                              </td>
                               <td>
                                     @can('edit_role')
                                           <a class="btn btn-sm btn-info" href="{{ route('roles.edit', $role) }}">edit</a>
