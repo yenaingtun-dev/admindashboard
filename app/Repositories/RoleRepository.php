@@ -56,7 +56,7 @@ class RoleRepository implements RoleRepositoryInterface
             $superAdminRoles = $superAdmin->roles()->get();
             foreach ($superAdminRoles as $value) {
                   $roles[] = $value->id;
-            } 
+            }
             $roles[] = $role->id;
             $this->userRepository->assignRole($roles, $superAdmin);
             return $role;
@@ -90,18 +90,30 @@ class RoleRepository implements RoleRepositoryInterface
 
       public function assignPermission($permissionInputs, $role)
       {
-            dd(count($permissionInputs) > 0);
-            dd($role);
             $permissions = [];
             $superPermission = [];
             if (count($permissionInputs) > 0) {
-                  foreach ($permissionInputs as $key => $value) {
-                        array_push($permissions, $value);
+                  foreach ($permissionInputs as $permissionInput) {
+                        if (is_array($permissionInput)) {
+                              foreach ($permissionInput[1] as $value) {
+                                    array_push($superPermission, $value);
+                              }
+                              foreach ($permissionInput[0] as $value) {
+                                    array_push($superPermission, $value);
+                                    array_push($permissions, $value);
+                              }
+                        } else {
+                              array_push($permissions, $permissionInput);
+                        }
                   }
             }
-            if (count($role) > 1) {
+            if (is_array($role)) {
                   foreach ($role as $value) {
-                        $value->permissions()->sync($permissions);
+                        if ($value->title == 'super_admin') {
+                              $value->permissions()->sync($superPermission);
+                        } else {
+                              $value->permissions()->sync($permissions);
+                        }
                   }
             } else {
                   $role->permissions()->sync($permissions);

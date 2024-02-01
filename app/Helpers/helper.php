@@ -39,52 +39,53 @@ class helper
 
       static public function getImageSrc($path)
       {
-          $src = '/default_image.png';
-          if ($path && str_contains($path, '/')) {
-              if (file_exists(explode('/', $path, 2)[1])) {
-                  $src = $path;
-              }
-          }
-          return $src;
+            $src = '/default_image.png';
+            if ($path && str_contains($path, '/')) {
+                  if (file_exists(explode('/', $path, 2)[1])) {
+                        $src = $path;
+                  }
+            }
+            return $src;
       }
 
       static public function getImageName($fileName)
       {
-         $array  = explode('/', $fileName);
-         return $array[count($array) - 1];
+            $array  = explode('/', $fileName);
+            return $array[count($array) - 1];
       }
 
       public static function removeMedia($model, $model_id, $type, $fileName)
-    {
-        // dd($model::IMAGE_PATH.$type.'/'.$fileName, File::exists($model::IMAGE_PATH.$type.'/'.$fileName));
-        if (File::exists($model::IMAGE_PATH.$type.'/'.$fileName)) {
-            File::delete($model::IMAGE_PATH.$type.'/'.$fileName);
-        }
+      {
+            // dd($model::IMAGE_PATH.$type.'/'.$fileName, File::exists($model::IMAGE_PATH.$type.'/'.$fileName));
+            if (File::exists($model::IMAGE_PATH . $type . '/' . $fileName)) {
+                  File::delete($model::IMAGE_PATH . $type . '/' . $fileName);
+            }
 
-        $modelObject = $model::find($model_id);
-        //'/user-avatar.png'
-        $modelObject->$type = NULL;
-        $modelObject->save();
+            $modelObject = $model::find($model_id);
+            //'/user-avatar.png'
+            $modelObject->$type = NULL;
+            $modelObject->save();
 
-        return response()->json(['message' => 'success']);
-    }
-
-    static public function hasRole($role_id, $user_roles) : bool {
-      foreach ($user_roles as $key => $user_role) {
-          if ($user_role->id == $role_id) {
-              return true;
-          }
+            return response()->json(['message' => 'success']);
       }
-      return false;
-  }
+
+      static public function hasRole($role_id, $user_roles): bool
+      {
+            foreach ($user_roles as $key => $user_role) {
+                  if ($user_role->id == $role_id) {
+                        return true;
+                  }
+            }
+            return false;
+      }
 
       /**
        * get admin role user id
        */
-      public static function getUserAdmin($adminRole) 
+      public static function getUserAdmin($adminRole)
       {
             return User::whereHas('roles', function ($query) use ($adminRole) {
-                  $query->where('title', $adminRole );
+                  $query->where('title', $adminRole);
             })->first();
-      } 
+      }
 }
