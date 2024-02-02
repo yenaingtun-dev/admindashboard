@@ -56,10 +56,10 @@ class BranchController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\branch  $branch
+     * @param  \App\Models\Branch  $branch
      * @return \Illuminate\Http\Response
      */
-    public function show(branch $branch)
+    public function show(Branch $branch)
     {
         dd($branch);
     }
@@ -67,10 +67,10 @@ class BranchController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\branch  $branch
+     * @param  \App\Models\Branch  $branch
      * @return \Illuminate\Http\Response
      */
-    public function edit(branch $branch)
+    public function edit(Branch $branch)
     {
         return view('admin.branches.branch-edit', compact('branch'));
     }
@@ -79,10 +79,10 @@ class BranchController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\branch  $branch
+     * @param  \App\Models\Branch  $branch
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, branch $branch)
+    public function update(Request $request, Branch $branch)
     {
         $this->branchRepository->update($request->all(), $branch);
         return back();
@@ -91,10 +91,10 @@ class BranchController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\branch  $branch
+     * @param  \App\Models\Branch  $branch
      * @return \Illuminate\Http\Response
      */
-    public function destroy(branch $branch)
+    public function destroy(Branch $branch)
     {
         $this->branchRepository->softDelete($branch);
         return back();

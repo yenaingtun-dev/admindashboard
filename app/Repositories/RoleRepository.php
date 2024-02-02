@@ -37,11 +37,13 @@ class RoleRepository implements RoleRepositoryInterface
                         'branch_role_slug' => $data['name'] . ' branch_role_slug'
                   ]);
                   $superAdmin = helper::getUserAdmin('super_admin');
-                  $roles = [$role->id];
+                  $roles[] = $role->id;
                   $this->userRepository->assignRole($roles, $superAdmin);
                   return $role;
             } else {
-                  return Role::create($data);
+                  return Role::create([
+                        'title' => $data['title']
+                  ]);
             }
       }
 
@@ -99,7 +101,7 @@ class RoleRepository implements RoleRepositoryInterface
                                     array_push($superPermission, $value);
                               }
                               foreach ($permissionInput[0] as $value) {
-                                    array_push($superPermission, $value);
+                                    // array_push($superPermission, $value);
                                     array_push($permissions, $value);
                               }
                         } else {
@@ -107,7 +109,7 @@ class RoleRepository implements RoleRepositoryInterface
                         }
                   }
             }
-            if (is_array($role)) {
+            if (isset($role[0])) {
                   foreach ($role as $value) {
                         if ($value->title == 'super_admin') {
                               $value->permissions()->sync($superPermission);
