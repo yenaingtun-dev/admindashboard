@@ -41,10 +41,12 @@ class RoleRepository implements RoleRepositoryInterface
                   $this->userRepository->assignRole($roles, $superAdmin);
                   return $role;
             } else {
-                  return Role::create([
-                        'title' => $data['title']
-                  ]);
+                  // return Role::create([
+                  //       'title' => $data['title']
+                  // ]);
+                        return Role::create($data);
             }
+
       }
 
       public function storeBranch($data)

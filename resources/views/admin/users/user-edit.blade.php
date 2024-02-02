@@ -7,18 +7,27 @@
                 @csrf @method('PUT')
                 <div class="mb-3">
                     <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" id="name" name="name"
+                    <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name" name="name"
                         value="{{ old('name', $user->name) }}" />
+                    @error('name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email"
+                    <input type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" id="email" name="email"
                         value="{{ old('email', $user->email) }}" />
+                    @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password"
+                    <input type="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" id="password" name="password"
                         value="{{ old('password', $user->password) }}" />
+                    @error('password')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
                 @if ($roles)
                     <div class="mb-3"> 
@@ -34,7 +43,7 @@
                     </div>
                 @endif
                 <div class="form-group mb-3">
-                    <div class="needsclick dropzone" id="profileImagesPathDropzone"></div>
+                    <div class="needsclick dropzone {{ $errors->has('profile_image_path') ? 'is-invalid' : '' }}" id="profileImagesPathDropzone"></div>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
                 <a href="{{ route('users.index') }}" class="btn btn-secondary">Cancel</a>

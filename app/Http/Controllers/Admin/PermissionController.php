@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePermissionRequest;
+use App\Http\Requests\UpdatePermissionRequest;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repositories\Interfaces\PermissionRepositoryInterface;
@@ -45,7 +47,7 @@ class PermissionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePermissionRequest $request)
     {
         abort_if(Gate::denies('create_permission'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $this->permissionRepository->store($request->all());
@@ -82,7 +84,7 @@ class PermissionController extends Controller
      * @param  \App\Models\Permission  $permission
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Permission $permission)
+    public function update(UpdatePermissionRequest $request, Permission $permission)
     {
         abort_if(Gate::denies('edit_permission'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $this->permissionRepository->update($request->all(), $permission);

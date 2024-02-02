@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Branch;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\StoreBranchRequest;
+use App\Http\Requests\UpdateBranchRequest;
+use App\Repositories\Interfaces\RoleRepositoryInterface;
 use App\Repositories\Interfaces\BranchRepositoryInterface;
 use App\Repositories\Interfaces\PermissionRepositoryInterface;
-use App\Repositories\Interfaces\RoleRepositoryInterface;
 
 class BranchController extends Controller
 {
@@ -38,6 +42,7 @@ class BranchController extends Controller
      */
     public function create()
     {
+        abort_if(Gate::denies('create_branch'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         return view('admin.branches.branch-create');
     }
 
@@ -47,7 +52,7 @@ class BranchController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreBranchRequest $request)
     {
         $this->branchRepository->store($request->all());
         return redirect(route('branches.index'));
@@ -72,6 +77,7 @@ class BranchController extends Controller
      */
     public function edit(Branch $branch)
     {
+        abort_if(Gate::denies('edit_branch'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         return view('admin.branches.branch-edit', compact('branch'));
     }
 
@@ -82,7 +88,7 @@ class BranchController extends Controller
      * @param  \App\Models\Branch  $branch
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Branch $branch)
+    public function update(UpdateBranchRequest $request, Branch $branch)
     {
         $this->branchRepository->update($request->all(), $branch);
         return back();
@@ -96,6 +102,7 @@ class BranchController extends Controller
      */
     public function destroy(Branch $branch)
     {
+        abort_if(Gate::denies('delete_branch'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $this->branchRepository->softDelete($branch);
         return back();
     }
