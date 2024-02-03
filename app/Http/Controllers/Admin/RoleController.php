@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreRoleRequest;
+use App\Http\Requests\UpdateRoleRequest;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repositories\Interfaces\RoleRepositoryInterface;
@@ -48,7 +50,7 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRoleRequest $request)
     {
         abort_if(Gate::denies('create_role'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $role = $this->roleRepository->store($request->all());
@@ -90,9 +92,9 @@ class RoleController extends Controller
      * @param  \App\Models\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(UpdateRoleRequest $request, Role $role)
     {
-        abort_if(Gate::denies('edit_role'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // abort_if(Gate::denies('edit_role'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $this->roleRepository->update($request->all(), $role);
         if(count($request->input('permissions', [])) > 0) {
             $this->roleRepository->assignPermission($request->input('permissions'), $role);

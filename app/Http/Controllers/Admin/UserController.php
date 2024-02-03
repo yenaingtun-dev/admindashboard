@@ -7,8 +7,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Helpers\helper\helper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
+use Gate;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repositories\Interfaces\RoleRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
@@ -36,7 +38,7 @@ class UserController extends Controller
         return view('admin.users.user-create', compact('roles'));
     }
 
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
         abort_if(Gate::denies('create_user'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $user = $this->userRepository->store($request->all());
@@ -70,7 +72,7 @@ class UserController extends Controller
         return view('admin.users.user-edit', compact('user','roles'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
         $this->userRepository->update($request->all(), $user);
         if (count($request->input('roles', [])) > 0) {

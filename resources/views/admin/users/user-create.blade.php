@@ -8,27 +8,36 @@
                         @csrf
                         <div class="mb-3">
                               <label for="name" class="form-label">Name</label>
-                              <input type="text" class="form-control" id="name" name="name">
+                              <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" id="name" name="name">
+                              @error('name')
+                              <div class="invalid-feedback">{{ $message }}</div>
+                              @enderror
                         </div>
                         <div class="mb-3">
                               <label for="email" class="form-label">Email</label>
-                              <input type="email" class="form-control" id="email" name="email">
+                              <input type="email" class="form-control  {{ $errors->has('email') ? 'is-invalid' : '' }}" id="email" name="email">
+                              @error('email')
+                              <div class="invalid-feedback">{{ $message }}</div>
+                              @enderror
                         </div>
                         <div class="mb-3">
                               <label for="password" class="form-label">Password</label>
-                              <input type="password" class="form-control" id="password" name="password">
+                              <input type="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" id="password" name="password">
+                              @error('password')
+                              <div class="invalid-feedback">{{ $message }}</div>
+                              @enderror
                         </div>
                         @if ($roles)
-                              @foreach ($roles as $role)
-                                    <div class="mb-3">
-                                          <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="roles[]" value="{{ $role->id }}" id="{{ $role->title }}">
-                                                <label class="form-check-label" for="{{ $role->title }}">
-                                                      {{ $role->title }}
-                                                </label>
-                                          </div>
-                                    </div>
-                              @endforeach
+                        @foreach ($roles as $role)
+                        <div class="mb-3">
+                              <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="roles[]" value="{{ $role->id }}" id="{{ $role->title }}">
+                                    <label class="form-check-label" for="{{ $role->title }}">
+                                          {{ $role->title }}
+                                    </label>
+                              </div>
+                        </div>
+                        @endforeach
                         @endif
                         <div class="form-group mb-3">
                               <div class="needsclick dropzone" id="profileImagesPathDropzone">
@@ -102,26 +111,28 @@
             },
             init: function() {}
       });
-       // remove media
-    function removeMedia(file_name, type) {
+      // remove media
+      function removeMedia(file_name, type) {
             $.ajax({
-                type: 'POST',
-                url: "{{ route('users.remove_media') }}",
-                data: {
-                    'file_name': file_name,
-                    'type': type,
-                    'model_id': {!! auth()->user()->id !!},
-                },
-                headers: {
-                    'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                },
-                success: function(data) {
-                    console.log('success');
-                },
-                error: function(data) {
-                    console.log(data);
-                }
+                  type: 'POST',
+                  url: "{{ route('users.remove_media') }}",
+                  data: {
+                        'file_name': file_name,
+                        'type': type,
+                        'model_id': {
+                              !!auth() - > user() - > id!!
+                        },
+                  },
+                  headers: {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                  },
+                  success: function(data) {
+                        console.log('success');
+                  },
+                  error: function(data) {
+                        console.log(data);
+                  }
             });
-        }
+      }
 </script>
 @endsection

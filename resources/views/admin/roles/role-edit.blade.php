@@ -8,8 +8,11 @@
                 @csrf @method('PUT')
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="title" name="title"
+                    <input type="text" class="form-control {{ $errors->has('title') ? 'is-invalid' : '' }}" id="title" name="title"
                         value="{{ old('title', $role->title) }}" />
+                    @error('title')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
                 @if ($permissions)
                         @foreach ($permissions as $permission)

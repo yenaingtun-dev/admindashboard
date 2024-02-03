@@ -29,7 +29,7 @@ class PermissionRepository implements PermissionRepositoryInterface
 
       public function store($data)
       {
-            if ($data['id']) {
+            if (isset($data['id'])) {
                   $permission =  Permission::create([
                         'title' => $data['name'] . ' permission_branch',
                         'branch_id' => $data['id'],
@@ -58,7 +58,7 @@ class PermissionRepository implements PermissionRepositoryInterface
             }
             $adminPermissions[] = $permission->id;
             $superPermissions[] = $permission->id;
-            $permissions[] = [$adminPermissions, $superAdminPermissions];
+            $permissions[] = [$adminPermissions, $superPermissions];
             $roles = $superAdmin->roles;
             $this->roleRepository->assignPermission($permissions, $roles);
             return $permission;
@@ -66,7 +66,7 @@ class PermissionRepository implements PermissionRepositoryInterface
 
       public function update($data, $permission)
       {
-            return $permission->update($data)->save();
+            return $permission->update($data);
       }
 
       public function softDelete($user)
