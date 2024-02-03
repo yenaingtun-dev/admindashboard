@@ -49,6 +49,7 @@
       var profileImagesPathDropzone = new Dropzone("#profileImagesPathDropzone", {
             url: "{{ route('users.store_media') }}",
             maxFilesize: 2, // MB
+            maxFiles: 1,
             addRemoveLinks: true,
             headers: {
                   'X-CSRF-TOKEN': "{{ csrf_token() }}"

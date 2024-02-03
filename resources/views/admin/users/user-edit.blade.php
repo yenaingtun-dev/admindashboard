@@ -21,7 +21,7 @@
                         value="{{ old('password', $user->password) }}" />
                 </div>
                 @if ($roles)
-                    <div class="mb-3"> 
+                    <div class="mb-3">
                         @foreach ($roles as $role)
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="roles[]" value="{{ $role->id }}" id="{{ $role->title }}"
@@ -48,7 +48,8 @@
     profileImageDocumentMap = [];
     var profileImagesPathDropzone = new Dropzone("#profileImagesPathDropzone", {
         url: "{{ route('users.store_media') }}",
-        maxFilesize: 2, // MB
+        maxFilesize: 2,
+        maxFiles: 1,
         addRemoveLinks: true,
         headers: {
             'X-CSRF-TOKEN': "{{ csrf_token() }}"
@@ -99,7 +100,7 @@
                 }
             });
         },
-        init: function () { } 
+        init: function () { }
     });
     // Loop through imagePaths and add images to Dropzone
     var imagePath = {!! json_encode($user->profile_image_path) !!};
