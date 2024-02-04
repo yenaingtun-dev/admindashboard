@@ -91,7 +91,7 @@ class BranchController extends Controller
     public function update(UpdateBranchRequest $request, Branch $branch)
     {
         $this->branchRepository->update($request->all(), $branch);
-        return back();
+        return redirect(route('branches.index'));
     }
 
     /**
@@ -104,6 +104,6 @@ class BranchController extends Controller
     {
         abort_if(Gate::denies('delete_branch'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $this->branchRepository->softDelete($branch);
-        return back();
+        return redirect(route('branches.index'));
     }
 }

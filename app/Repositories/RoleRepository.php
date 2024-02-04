@@ -68,8 +68,27 @@ class RoleRepository implements RoleRepositoryInterface
 
       public function update($data, $role)
       {
-            $roleData = ['title' => $data['title']];
-            return $role->update($roleData);
+            // $roleData = ['title' => $data['title']];
+            return $role->update($data);
+      }
+
+
+      public function updateBranch($data)
+      {
+            dd($data);
+            $role = Role::create([
+                  'title' => $data['name'] . ' role_branch',
+                  'branch_id' => $data['id'],
+                  'branch_role_slug' => $data['name'] . ' branch_role_slug'
+            ]);
+            $superAdmin = helper::getUserAdmin('super_admin');
+            $superAdminRoles = $superAdmin->roles()->get();
+            foreach ($superAdminRoles as $value) {
+                  $roles[] = $value->id;
+            }
+            $roles[] = $role->id;
+            $this->userRepository->assignRole($roles, $superAdmin);
+            return $role;
       }
 
       public function softDelete($user)

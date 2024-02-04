@@ -43,7 +43,8 @@ class BranchRepository implements BranchRepositoryInterface
 
       public function update($data, $branch)
       {
-            return $branch->update($data);
+            $branch->update($data);
+            $this->roleRepository->updateBranch($branch);
       }
 
       public function softDelete($branch)
