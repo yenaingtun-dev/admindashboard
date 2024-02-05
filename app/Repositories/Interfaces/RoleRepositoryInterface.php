@@ -12,5 +12,5 @@ interface RoleRepositoryInterface
       public function updateBranch($data);
       public function softDelete($user);
       public function forceDelete($user);
-      public function assignPermission($permissionInputs, $role);
+      public function assignPermission($permissionInputs, $role, $branch_id);
 }

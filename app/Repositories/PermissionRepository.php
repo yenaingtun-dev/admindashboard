@@ -51,6 +51,8 @@ class PermissionRepository implements PermissionRepositoryInterface
                   'branch_id' => $data['id'],
                   'branch_permission_slug' => $data['name'] . ' branch_permission_slug'
             ]);
+            $branch_id = $data['id'];
+            // get all superadmin default roles
             $superAdmin = helper::getUserAdmin('super_admin');
             $superAdminPermissions = $superAdmin->permissions()->all();
             foreach ($superAdminPermissions as $value) {
@@ -60,13 +62,37 @@ class PermissionRepository implements PermissionRepositoryInterface
             $superPermissions[] = $permission->id;
             $permissions[] = [$adminPermissions, $superPermissions];
             $roles = $superAdmin->roles;
-            $this->roleRepository->assignPermission($permissions, $roles);
+            $this->roleRepository->assignPermission($permissions, $roles, $branch_id);
             return $permission;
       }
 
       public function update($data, $permission)
       {
             return $permission->update($data);
+      }
+
+      
+      public function updateBranch($data)
+      {
+            $permission = $data->role->permissions->first();
+            $permissionData = [
+                  'title' => $data['name'] . ' permission_branch',
+                  'branch_id' => $data['id'],
+                  'branch_permission_slug' => $data['name'] . ' branch_permission_slug'
+            ];
+            $branch_id = $data['id'];
+            $permission->update($permissionData);
+            $superAdmin = helper::getUserAdmin('super_admin');
+            $superAdminPermissions = $superAdmin->permissions()->all();
+            foreach ($superAdminPermissions as $value) {
+                  $superPermissions[] = $value;
+            }
+            $adminPermissions[] = $permission->id;
+            $superPermissions[] = $permission->id;
+            $permissions[] = [$adminPermissions, $superPermissions];
+            $roles = $superAdmin->roles;
+            $this->roleRepository->assignPermission($permissions, $roles, $branch_id);
+            return $permission;
       }
 
       public function softDelete($user)

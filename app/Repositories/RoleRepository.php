@@ -68,19 +68,16 @@ class RoleRepository implements RoleRepositoryInterface
 
       public function update($data, $role)
       {
-            // $roleData = ['title' => $data['title']];
-            return $role->update($data);
+            $roleData = ['title' => $data['title']];
+            return $role->update($roleData);
       }
 
 
       public function updateBranch($data)
       {
-            dd($data);
-            $role = Role::create([
-                  'title' => $data['name'] . ' role_branch',
-                  'branch_id' => $data['id'],
-                  'branch_role_slug' => $data['name'] . ' branch_role_slug'
-            ]);
+            $role = $data->role;
+            $roleData = ['title' => $data['name'], 'branch_role_slug' => $data['name'] . ' branch_role_slug', 'branch_id' => $data['id'] ];
+            $role->update($roleData);
             $superAdmin = helper::getUserAdmin('super_admin');
             $superAdminRoles = $superAdmin->roles()->get();
             foreach ($superAdminRoles as $value) {
@@ -111,18 +108,19 @@ class RoleRepository implements RoleRepositoryInterface
             $this->all()->onlyTrashed()->restore();
       }
 
-      public function assignPermission($permissionInputs, $role)
+      public function assignPermission($permissionInputs, $roles, $branch_id)
       {
             $permissions = [];
             $superPermission = [];
             if (count($permissionInputs) > 0) {
                   foreach ($permissionInputs as $permissionInput) {
                         if (is_array($permissionInput)) {
+                              // superadmin permission 
                               foreach ($permissionInput[1] as $value) {
                                     array_push($superPermission, $value);
                               }
+                              // branchadmin permission
                               foreach ($permissionInput[0] as $value) {
-                                    // array_push($superPermission, $value);
                                     array_push($permissions, $value);
                               }
                         } else {
@@ -130,16 +128,19 @@ class RoleRepository implements RoleRepositoryInterface
                         }
                   }
             }
-            if (isset($role[0])) {
-                  foreach ($role as $value) {
-                        if ($value->title == 'super_admin') {
-                              $value->permissions()->sync($superPermission);
+            if (isset($roles[0])) {
+                  foreach ($roles as $role) {
+                        if ($role->title == 'super_admin') {
+                              $role->permissions()->sync($superPermission);
                         } else {
-                              $value->permissions()->sync($permissions);
+                              if($branch_id == $role->branch_id)
+                              {
+                                    $role->permissions()->sync($permissions);
+                              }
                         }
                   }
             } else {
-                  $role->permissions()->sync($permissions);
+                  $roles->permissions()->sync($permissions);
             }
       }
 }

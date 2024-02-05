@@ -55,7 +55,7 @@ class RoleController extends Controller
         abort_if(Gate::denies('create_role'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $role = $this->roleRepository->store($request->all());
         if(count($request->input('permissions', [])) > 0) {
-            $this->roleRepository->assignPermission($request->input('permissions'), $role);
+            $this->roleRepository->assignPermission($request->input('permissions'), $role, $branch_id = null);
         }
         return redirect()->route('roles.index')->with('success', 'Role Create Successfully!');
     }
@@ -97,7 +97,7 @@ class RoleController extends Controller
         // abort_if(Gate::denies('edit_role'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $this->roleRepository->update($request->all(), $role);
         if(count($request->input('permissions', [])) > 0) {
-            $this->roleRepository->assignPermission($request->input('permissions'), $role);
+            $this->roleRepository->assignPermission($request->input('permissions'), $role, $branch_id = null);
         }
         return redirect()->route('roles.index')->with('success', 'Role Update Successfully!');
     }
