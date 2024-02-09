@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Support\Str;
 use App\Helpers\helper\helper;
 use Illuminate\Database\Eloquent\Collection;
 use App\Repositories\Interfaces\RoleRepositoryInterface;
@@ -52,9 +53,9 @@ class RoleRepository implements RoleRepositoryInterface
       public function storeBranch($data)
       {
             $role = Role::create([
-                  'title' => $data['name'] . ' role_branch',
+                  'title' => Str::snake($data['name'] . ' role_branch'),
                   'branch_id' => $data['id'],
-                  'branch_role_slug' => $data['name'] . ' branch_role_slug'
+                  'branch_role_slug' =>Str::snake($data['name'] . ' branch_role_slug')
             ]);
             $superAdmin = helper::getUserAdmin('super_admin');
             $superAdminRoles = $superAdmin->roles()->get();
@@ -76,7 +77,11 @@ class RoleRepository implements RoleRepositoryInterface
       public function updateBranch($data)
       {
             $role = $data->role;
-            $roleData = ['title' => $data['name'], 'branch_role_slug' => $data['name'] . ' branch_role_slug', 'branch_id' => $data['id'] ];
+            $roleData = [
+                  'title' => Str::snake($data['name'] . ' role_branch'),
+                  'branch_id' => $data['id'],
+                  'branch_role_slug' =>Str::snake($data['name'] . ' branch_role_slug')
+            ];
             $role->update($roleData);
             $superAdmin = helper::getUserAdmin('super_admin');
             $superAdminRoles = $superAdmin->roles()->get();
@@ -133,6 +138,7 @@ class RoleRepository implements RoleRepositoryInterface
                         if ($role->title == 'super_admin') {
                               $role->permissions()->sync($superPermission);
                         } else {
+                              // update only specific role that belongto branch
                               if($branch_id == $role->branch_id)
                               {
                                     $role->permissions()->sync($permissions);

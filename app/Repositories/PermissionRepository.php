@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Permission;
+use Illuminate\Support\Str;
 use App\Helpers\helper\helper;
 use Illuminate\Database\Eloquent\Collection;
 use App\Repositories\Interfaces\RoleRepositoryInterface;
@@ -47,9 +48,9 @@ class PermissionRepository implements PermissionRepositoryInterface
       public function storeBranch($data)
       {
             $permission =  Permission::create([
-                  'title' => $data['name'] . ' permission_branch',
+                  'title' => Str::snake($data['name'] . ' permission_branch'),
                   'branch_id' => $data['id'],
-                  'branch_permission_slug' => $data['name'] . ' branch_permission_slug'
+                  'branch_permission_slug' => Str::snake($data['name'] . ' branch_permission_slug')
             ]);
             $branch_id = $data['id'];
             // get all superadmin default roles
@@ -76,9 +77,9 @@ class PermissionRepository implements PermissionRepositoryInterface
       {
             $permission = $data->role->permissions->first();
             $permissionData = [
-                  'title' => $data['name'] . ' permission_branch',
+                  'title' => Str::snake($data['name'] . ' permission_branch'),
                   'branch_id' => $data['id'],
-                  'branch_permission_slug' => $data['name'] . ' branch_permission_slug'
+                  'branch_permission_slug' => Str::snake($data['name'] . ' branch_permission_slug')
             ];
             $branch_id = $data['id'];
             $permission->update($permissionData);
