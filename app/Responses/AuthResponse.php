@@ -26,7 +26,7 @@ trait AuthResponse
         ], $statusCode);
     }
 
-    public function successRegister($data, $message, $statusCode = 201, $accessToken)
+    public function successRegister($data, $message, $statusCode, $accessToken)
     {
         return response()->json([
             'data' => $data, 

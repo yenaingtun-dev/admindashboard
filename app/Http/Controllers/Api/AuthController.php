@@ -22,12 +22,12 @@ class AuthController extends Controller
                 'email' => 'email|required|unique:users',
                 'password' => 'required|confirmed'
             ]);
-            $validatedData['password'] = Hash::make($request->password);
+            $validatedData['password'] = bcrypt($request->password);
             $user = User::create($validatedData);
             $accessToken = $user->createToken('authToken')->accessToken;
-            return $this->successRegister($user, 'successfully register', $accessToken);
+            return $this->successRegister($user, 'successfully register', 201, $accessToken);
         } catch (\Throwable $th) {
-            return $this->failRegister($th->errors(), 'fail to register');
+            return $this->failRegister($th->getMessage(), 'fail to register');
         }
     }
 
