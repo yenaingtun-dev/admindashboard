@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Responses\ResponseFormat;
 use App\Http\Controllers\Controller;
 use App\Repositories\Interfaces\PostRepositoryInterface;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -25,13 +26,13 @@ class PostController extends Controller
     public function index()
     {
         $posts = $this->postRepository->all();
-        if ($posts) {
+        if (!$posts->isEmpty()) {
             return $this->apiSuccessResponse($posts, 'getting all posts');
         } else {
             return $this->apiErrorResponse($posts,'there is no posts!');
         }
     }
-
+    
     /**
      * Store a newly created resource in storage.
      *

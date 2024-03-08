@@ -31,4 +31,11 @@ trait ResponseFormat
             'errors'=>$errors
         ], $statusCode);
     }
+    public function apiNoAuth($message, $statusCode = 500) 
+    {
+        return response()->json([
+            'message' => $message,
+            'code' => $statusCode
+        ]);
+    }
 }
