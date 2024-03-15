@@ -1,7 +1,8 @@
-<?php 
+<?php
+
 namespace App\Responses;
 
-trait ResponseFormat 
+trait ResponseFormat
 {
     public function apiSuccessResponse($data, $message, $statusCode = 200)
     {
@@ -12,7 +13,7 @@ trait ResponseFormat
             'code' => $statusCode,
         ], $statusCode);;
     }
-    public function apiErrorResponse($data=null,$message, $statusCode = 500)
+    public function apiErrorResponse($data = null, $message, $statusCode = 500)
     {
         return response()->json([
             'data' => $data,
@@ -21,17 +22,17 @@ trait ResponseFormat
             'code' => $statusCode,
         ], $statusCode);
     }
-    public function apiValidationErrorResponse($data=null,$message,$errors=[], $statusCode = 422)
+    public function apiValidationErrorResponse($data = null, $message, $errors = [], $statusCode = 422)
     {
         return response()->json([
             'data' => $data,
             'message' => $message,
             'success' => false,
             'code' => $statusCode,
-            'errors'=>$errors
+            'errors' => $errors
         ], $statusCode);
     }
-    public function apiNoAuth($message, $statusCode = 500) 
+    public function apiNoAuth($message, $statusCode = 500)
     {
         return response()->json([
             'message' => $message,

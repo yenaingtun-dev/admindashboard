@@ -16,19 +16,18 @@ class AuthController extends Controller
     */
     public function register(Request $request)
     {
-        try {
-            $validatedData = $request->validate([
-                'name' => 'required|max:55',
-                'email' => 'email|required|unique:users',
-                'password' => 'required|confirmed'
-            ]);
-            $validatedData['password'] = bcrypt($request->password);
-            $user = User::create($validatedData);
-            $accessToken = $user->createToken('authToken')->accessToken;
-            return $this->successRegister($user, 'successfully register', 201, $accessToken);
-        } catch (\Throwable $th) {
-            return $this->failRegister($th->getMessage(), 'fail to register');
+        $validatedData = $request->validate([
+            'name' => 'required|max:55',
+            'email' => 'email|required|unique:users',
+            'password' => 'required|confirmed'
+        ]);
+        if (!auth()->attempt($validatedData)) {
+            return $this->failRegister($validatedData, 'fail to register', 422);
         }
+        $validatedData['password'] = bcrypt($request->password);
+        $user = User::create($validatedData);
+        $accessToken = $user->createToken('authToken')->accessToken;
+        return $this->successRegister($user, 'successfully register', 201, $accessToken);
     }
 
     /* 
