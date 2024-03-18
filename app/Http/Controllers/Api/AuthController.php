@@ -21,9 +21,9 @@ class AuthController extends Controller
             'email' => 'email|required|unique:users',
             'password' => 'required|confirmed'
         ]);
-        if (!auth()->attempt($validatedData)) {
-            return $this->failRegister($validatedData, 'fail to register', 422);
-        }
+        // if (!auth()->attempt($validatedData)) {
+        //     return $this->failRegister($validatedData, 'fail to register', 422);
+        // }
         $validatedData['password'] = bcrypt($request->password);
         $user = User::create($validatedData);
         $accessToken = $user->createToken('authToken')->accessToken;
